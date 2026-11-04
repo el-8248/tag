@@ -1,51 +1,54 @@
 #include <Arduino.h>
-#include "heltec.h"
-#include "oled/OLEDDisplayFonts.h"
+#include <U8g2lib.h>
+#include <Wire.h>
 
-int counter = 0;
+// Initialize the SSD1306 display via I2C for the Heltec WiFi Kit 32
+// Pins for Heltec V1/V2: SDA = 4, SCL = 15, Reset = 16
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ 16, /* clock=*/ 15, /* data=*/ 4);
+
+// Text to scroll (Note: logisoso62_tn is a numbers-and-symbols-only ultra-large font to save RAM)
+const char* scrollMessage = "_8248_";
+
+int16_t xPosition;
+int16_t textWidth;
 
 void setup() {
-  // Initialize the Heltec board (Display Enable, LoRa Disable, Serial Enable, PABOOST Disable, Band)
-  Heltec.begin(true, false, true, false, 915E6);
+  // Wake up the display wire hardware
+  pinMode(16, OUTPUT);
+  digitalWrite(16, LOW);
+  delay(50);
+  digitalWrite(16, HIGH);
 
-  // Set up the display font and alignment
-  Heltec.display->setFont(ArialMT_Plain_16);
-  Heltec.display->setTextAlignment(TEXT_ALIGN_LEFT);
+  u8g2.begin();
+  
+  // Set a massive 62-pixel tall native font block
+  u8g2.setFont(u8g2_font_logisoso62_tn); 
+  u8g2.setFontMode(0); // Enable solid background masking
+
+  // Calculate pixel length of the text string
+  textWidth = u8g2.getUTF8Width(scrollMessage);
+  
+  xPosition = 128; // Start off the right side of the screen
 }
 
 void loop() {
-  // Clear the screen buffer
-  Heltec.display->clear();
-
-  // Draw static text
-  Heltec.display->drawString(0, 0, "Heltec WB32 Test");
+  u8g2.clearBuffer();
   
-  // Draw the variable counter
-  String counterString = "Count: " + String(counter);
-  Heltec.display->drawString(0, 24, counterString);
-
-  // Send the buffer to the physical screen
-  Heltec.display->display();
-
-  counter++;
-  delay(1000);
-
-  Heltec.display->clear();
-
-
-  Heltec.display->drawString(0, 0, "Elliott Weston Ball");
+  // Draw the text (Y coordinate is the baseline, so 62 places it perfectly near the bottom)
+  u8g2.drawUTF8(xPosition, 62, scrollMessage);
   
-  Heltec.display->drawString(0, 24, "ChainLynx 8248");
-
-  // Send the buffer to the physical screen
-  Heltec.display->display();
-
-  counter++;
-  delay(1000);
-  counter++;
-  delay(1000);
-  counter++;
-  delay(1000);
-  counter++;
-  delay(1000);
+  // Create a continuous seamless look
+  if (xPosition < 0) {
+    u8g2.drawUTF8(xPosition + textWidth, 62, scrollMessage);
+  }
+  
+  u8g2.sendBuffer();
+  
+  // Scroll leftwards
+  xPosition -= 2;
+  if (xPosition <= -textWidth) {
+    xPosition = 0;
+  }
+  
+  delay(10);
 }

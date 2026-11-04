@@ -10,7 +10,7 @@
             "includePath": [
                 "/home/lily/Documents/PlatformIO/Projects/tag/include",
                 "/home/lily/Documents/PlatformIO/Projects/tag/src",
-                "/home/lily/Documents/PlatformIO/Projects/tag/.pio/libdeps/heltec_wifi_kit_32/Heltec ESP32 Dev-Boards/src",
+                "/home/lily/Documents/PlatformIO/Projects/tag/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
                 "/home/lily/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                 "/home/lily/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                 "/home/lily/.platformio/packages/framework-arduinoespressif32/cores/esp32",
@@ -376,7 +376,7 @@
                 "path": [
                     "/home/lily/Documents/PlatformIO/Projects/tag/include",
                     "/home/lily/Documents/PlatformIO/Projects/tag/src",
-                    "/home/lily/Documents/PlatformIO/Projects/tag/.pio/libdeps/heltec_wifi_kit_32/Heltec ESP32 Dev-Boards/src",
+                    "/home/lily/Documents/PlatformIO/Projects/tag/.pio/libdeps/heltec_wifi_kit_32/U8g2/src",
                     "/home/lily/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src",
                     "/home/lily/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src",
                     "/home/lily/.platformio/packages/framework-arduinoespressif32/cores/esp32",
